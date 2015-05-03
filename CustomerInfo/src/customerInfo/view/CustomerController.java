@@ -83,19 +83,61 @@ public class CustomerController {
 			male.setSelected(false);
 		}
 	}
-
+	
 	@FXML
 	private void handleZip() {
+		if (zip.getText()==null) {
+			errors.setText("No errors");
+		}
+		else if (Pattern.matches("^\\d+$", zip.getText())) {
+			errors.setText("No errors");
+			}
+		else {
+			errors.setText("Zip must numeric");
+			zip.setText(null);
+		}
 	}
 
 	@FXML
 	private void handleSave() {
-		if (Pattern.matches("^\\d+$", zip.getText())) {
+		if (firstName.getText()==null) {
+			errors.setText("No First Name");
+		}
+		else if (firstName.getText().length()>50){
+			errors.setText("First Name is too long");
+		}
+		else if (middleInitial.getText()==null) {
+			errors.setText("No middleInitial");
+		}
+		else if (middleInitial.getText().length()>1){
+			errors.setText("Middle Initial too long");
+		}
+		else if (lastName.getText()==null) {
+			errors.setText("No last Name");
+		}
+		else if (lastName.getText().length()>50){
+			errors.setText("Last Name too long");
+		}
+		else if (address.getText()==null) {
+			errors.setText("No address");
+		}
+		else if (address.getText().length()>50){
+			errors.setText("Address too long");
+		}
+		else if (city.getText()==null) {
+			errors.setText("No city");
+		}
+		else if (city.getText().length()>25){
+			errors.setText("City too long");
+		}
+		else if (zip.getText()==null) {
+			errors.setText("No Zip");
+		}
+		else if (Pattern.matches("^\\d+$", zip.getText())) {
 			if (zip.getText().length() < 5
 					|| zip.getText().length() > 9) {
 				errors.setText("Zip must be 5-9 digits");
 			}
-
 			else {
 				errors.setText("saved");
 				customerInfo.model.CustomerSave.setCustomer(new Customer(
