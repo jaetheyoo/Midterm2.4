@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
@@ -35,12 +34,17 @@ public class CustomerController {
 	private ComboBox<String> state;
 	@FXML
 	private TextField zip;
-	@FXML 
-	private Label errors;
+	@FXML
+	private TextField errors;
 
 	Customer myCustomer;
 
-	private ObservableList<String> states = FXCollections.observableArrayList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "Ks", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY");
+	private ObservableList<String> states = FXCollections.observableArrayList(
+			"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI",
+			"ID", "IL", "IN", "IA", "Ks", "KY", "LA", "ME", "MD", "MA", "MI",
+			"MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC",
+			"ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+			"VT", "VA", "WA", "WV", "WI", "WY");
 
 	private String getGender() {
 		if (male.selectedProperty().get()) {
@@ -50,7 +54,7 @@ public class CustomerController {
 		}
 		return "";
 	}
-	
+
 	@FXML
 	private void initialize() {
 		state.setItems(states);
@@ -63,8 +67,8 @@ public class CustomerController {
 		zip.setText(null);
 		male.setSelected(false);
 		female.setSelected(false);
-		errors = new Label();
-		}
+		errors.setText("No errors");
+	}
 
 	@FXML
 	private void handleMale() {
@@ -79,31 +83,32 @@ public class CustomerController {
 			male.setSelected(false);
 		}
 	}
-	
+
 	@FXML
 	private void handleZip() {
-		//if text is alpha
-		//clear
-		//should only accept numbers??
 	}
-	
+
 	@FXML
 	private void handleSave() {
-		if (Pattern.matches("\\D", zip.getText())) {
-			address.setText("Zip must be digits");
-			errors.setText("Zip must be digits");
-		}
-		//else if ((Integer.parseInt(zip.lengthProperty().toString())) < 5 || (Integer.parseInt(zip.lengthProperty().toString())) > 9) {
-			//errors.setText("Zip must be 5-9 digits");
-		//}
-		else {
-			errors.setText("saved");
-			address.setText("Dfas");
+		if (Pattern.matches("^\\d+$", zip.getText())) {
+			if (zip.getText().length() < 5
+					|| zip.getText().length() > 9) {
+				errors.setText("Zip must be 5-9 digits");
+			}
 
-			customerInfo.model.CustomerSave.setCustomer(new Customer(firstName.getText(), middleInitial.getText(),lastName.getText(), getGender(), address.getText(),city.getText(), state.getValue(), zip.getText()));
+			else {
+				errors.setText("saved");
+				customerInfo.model.CustomerSave.setCustomer(new Customer(
+						firstName.getText(), middleInitial.getText(), lastName
+								.getText(), getGender(), address.getText(),
+						city.getText(), state.getValue(), zip.getText()));
+			}
+		}
+		else {
+			errors.setText("Zip must be numeric");
+		}
 	}
-	}
-	
+
 	@FXML
 	private void handleClear() {
 		initialize();
