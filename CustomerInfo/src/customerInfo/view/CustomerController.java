@@ -6,8 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+
+import java.util.regex.Pattern;
 
 public class CustomerController {
 	@FXML
@@ -32,6 +35,8 @@ public class CustomerController {
 	private ComboBox<String> state;
 	@FXML
 	private TextField zip;
+	@FXML 
+	private Label errors;
 
 	Customer myCustomer;
 
@@ -58,7 +63,8 @@ public class CustomerController {
 		zip.setText(null);
 		male.setSelected(false);
 		female.setSelected(false);
-	}
+		errors = new Label();
+		}
 
 	@FXML
 	private void handleMale() {
@@ -83,9 +89,21 @@ public class CustomerController {
 	
 	@FXML
 	private void handleSave() {
-		customerInfo.model.CustomerSave.setCustomer(new Customer(firstName.getText(), middleInitial.getText(),lastName.getText(), getGender(), address.getText(),city.getText(), state.getValue(), zip.getText()));
-	}
+		if (Pattern.matches("\\D", zip.getText())) {
+			address.setText("Zip must be digits");
+			errors.setText("Zip must be digits");
+		}
+		//else if ((Integer.parseInt(zip.lengthProperty().toString())) < 5 || (Integer.parseInt(zip.lengthProperty().toString())) > 9) {
+			//errors.setText("Zip must be 5-9 digits");
+		//}
+		else {
+			errors.setText("saved");
+			address.setText("Dfas");
 
+			customerInfo.model.CustomerSave.setCustomer(new Customer(firstName.getText(), middleInitial.getText(),lastName.getText(), getGender(), address.getText(),city.getText(), state.getValue(), zip.getText()));
+	}
+	}
+	
 	@FXML
 	private void handleClear() {
 		initialize();
